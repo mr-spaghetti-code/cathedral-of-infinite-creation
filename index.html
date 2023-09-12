@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="utf-8">
+		<title>The Cathedral of Infinite Creation</title>
+        <link type="text/css" rel="stylesheet" href="main.css">
+		<script src="//unpkg.com/element-resize-detector/dist/element-resize-detector.min.js"></script>
+	</head>
+	<body>
+        <div id="overlay">
+			<div id="introText">
+				<h1>🎨 🤖 The Cathedral of Infinite Creation</h1>
+				<p>New creations are being made every second. Explore human-machine creativity in real-time.</p>
+				<p>Drag to rotate and click or tap on an image to see its prompt. Scroll or pinch to zoom.</p>
+				<p>This experience requires a fast internet connection.</p> 
+				<p>Sound on 🔊</p> 
+				<p>A creation by <a href="https://www.jfiadeiro.com/">João Fiadeiro</a></p>	
+			</div>
+			<div id="aboutText">
+				<h1>About</h1>
+				<p>Enter the "Cathedral of Infinite Creation," a tool designed to offer a 3D-visualized journey through the constantly evolving world of AI-generated content. It was built to evoke the never-ending stream of content - a small glimpse into the human psyche. By ingesting tens of thousands of creations from MidJourney we can create an experience that I feel conveys the richness of human-machine creativity.</p>
+				<p>Images are associated by computing embeddings on their prompt and calculating a semantic similarity score.</p>
+				<p>Every few seconds, another image is "dropped" for you to see.</p>
+				<p>This is a desktop-optimized experience but it also works on high-end phones.</p>
+			</div>
+			<div id="buttonContainer">
+				<button id="startButton">Explore</button>
+				<button id="aboutButton">About</button>
+			</div>
+		</div>
+		<video id="backgroundvideo" playsinline webkit-playsinline muted autoplay loop src="/waveform_background.mp4" style="display: block;"></video>
+		<video id="video" playsinline webkit-playsinline muted loop src="/waveform_background.mp4" style="display: none;"></video>
+        <div id="prompt"></div>
+		<div id="3d-graph"></div>
+		<script type="module" src="/main.js"></script>
+	</body>
+</html>
