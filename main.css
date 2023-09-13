@@ -29,11 +29,9 @@
 	z-index: 2;
 	text-align: center;
 	padding: 10px;
-	/* margin: auto; */
 	bottom: 5%;
 	margin-left: 20%;
 	margin-right: 20%;
-	/* left: 50%; */
 	background: linear-gradient(
 	  50deg,
 	  rgba(255, 255, 255, 0.716) 12%,
@@ -52,6 +50,11 @@
   }
 #prompt.show {
 	opacity: 1;
+}
+
+#promptContainer {
+	display: flex;
+	justify-content: center;
 }
 
 
@@ -112,4 +115,25 @@
 	padding: 5%;
 	text-align: center;
 	border-radius: 20px;
+}
+
+#refreshContainer {
+	display: none;
+}
+
+#refreshButton {
+	/* display: none; */
+	background: linear-gradient(
+		50deg,
+		rgba(255, 255, 255, 0.716) 12%,
+		rgba(194, 190, 190, 0.671) 77%
+		);
+	border: 0;
+	border: 1px solid rgb(0, 0, 0);
+	border-radius: 4px;
+	color: #000000;
+	padding: 12px 18px;
+	text-transform: uppercase;
+	z-index: 3;
+	position: relative;
 }

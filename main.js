@@ -6,6 +6,9 @@ import TWEEN from '@tweenjs/tween.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 let sky;
+let nodes, links;
+let Graph;
+let init_graph_data, sliced_nodes;
 const init_node_amount = 25;
 const max_nodes = 1000;
 
@@ -19,6 +22,10 @@ aboutButton.addEventListener( 'click', showAbout );
 
 const aboutText = document.getElementById('aboutText');
 const introText = document.getElementById('introText');
+
+const refreshContainer = document.getElementById( 'refreshContainer' );
+const refreshButton = document.getElementById( 'refreshButton' );
+refreshButton.addEventListener( 'click', refreshGraph );
 
 
 let showingAbout = false;
@@ -123,6 +130,39 @@ function playAudio(file) {
 
 }
 
+function refreshNetwork () {
+    console.log("refreshing network")
+    const nodes_shuffled = nodes.sort( () => Math.random() - 0.5);
+
+    sliced_nodes = nodes_shuffled.slice(0, init_node_amount)
+
+    init_graph_data = {
+        "nodes": sliced_nodes,
+        "links": []
+    }
+
+    let sliced_nodes_list = sliced_nodes.map(node => node["id"])
+
+    sliced_nodes.forEach(element => {
+        let l = links[element["id"]]
+        l.forEach(link => {
+            if (sliced_nodes_list.includes(link[0])) {
+                init_graph_data.links.push(
+                    {
+                        "source" : element["id"],
+                        "target" : link[0],
+                        "strength" : link[1]
+                    }
+                )
+            }
+        });
+    });
+}
+
+function refreshGraph() {
+    refreshNetwork(nodes, links)
+    Graph.graphData(init_graph_data)
+}
 function init() {
 
 
@@ -136,41 +176,45 @@ function init() {
     fetch(jsonUrl).then(r => r.json()).then(json => {
         overlay.remove();
         document.getElementById('backgroundvideo').remove();
-        let { nodes, links } = json
+        nodes = json.nodes;
+        links = json.links;
 
-        const nodes_shuffled = nodes.sort( () => Math.random() - 0.5);
+        refreshNetwork(nodes, links)
+        // sliced_nodes = network[1];
+        // init_graph_data = network[0];
+        // let sliced_nodes = refreshNetwork(nodes, links) ;
+        // const nodes_shuffled = nodes.sort( () => Math.random() - 0.5);
 
-        let sliced_nodes = nodes_shuffled.slice(0, init_node_amount)
+        // let sliced_nodes = nodes_shuffled.slice(0, init_node_amount)
 
-        let init_graph_data = {
-            "nodes": sliced_nodes,
-            "links": []
-        }
+        // let init_graph_data = {
+        //     "nodes": sliced_nodes,
+        //     "links": []
+        // }
 
-        let sliced_nodes_list = sliced_nodes.map(node => node["id"])
+        // let sliced_nodes_list = sliced_nodes.map(node => node["id"])
     
-        sliced_nodes.forEach(element => {
-            let l = links[element["id"]]
-            l.forEach(link => {
-                if (sliced_nodes_list.includes(link[0])) {
-                    init_graph_data.links.push(
-                        {
-                            "source" : element["id"],
-                            "target" : link[0],
-                            "strength" : link[1]
-                        }
-                    )
-                }
-            });
-        });
+        // sliced_nodes.forEach(element => {
+        //     let l = links[element["id"]]
+        //     l.forEach(link => {
+        //         if (sliced_nodes_list.includes(link[0])) {
+        //             init_graph_data.links.push(
+        //                 {
+        //                     "source" : element["id"],
+        //                     "target" : link[0],
+        //                     "strength" : link[1]
+        //                 }
+        //             )
+        //         }
+        //     });
+        // });
 
-        const Graph = new ForceGraph3D()
+        Graph = new ForceGraph3D()
         (document.getElementById('3d-graph'))
             .graphData(init_graph_data)
-            // .nodeLabel('prompt')
-            .linkOpacity([0.05])
+            .linkOpacity(0.05)
             .linkDirectionalParticles("strength")
-            .linkDirectionalParticleSpeed(d => d.strength * 0.001)
+            .linkDirectionalParticleSpeed(d => d.strength * 0.01)
             .linkDirectionalParticleWidth(0.2)
             .cameraPosition({ z: 200 })
             .showNavInfo(true)
@@ -198,8 +242,6 @@ function init() {
                 return sprite;
             })
             .onNodeClick(node => {
-            
-
                 click_history.push(node)
                 let previous_node_clicked = click_history[click_history.length - 2]
 
@@ -226,7 +268,7 @@ function init() {
                   3000  // ms transition duration
                 );
 
-                promptOverlay.innerHTML = node.prompt;
+                promptOverlay.innerHTML = "<p>" + node.prompt + "</p><p>Imagined by: " + node.username + "</p>";
                 // Add fade-in class to overlay
                 promptOverlay.classList.toggle("show");
 
@@ -236,7 +278,8 @@ function init() {
                 node.fz = node.z;
               });
       
-        
+        refreshContainer.style.display = 'block';
+
         const bloomPass = new UnrealBloomPass();
         bloomPass.strength = 0;
         bloomPass.radius = 1;

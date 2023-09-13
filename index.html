@@ -5,6 +5,10 @@
 		<title>The Cathedral of Infinite Creation</title>
         <link type="text/css" rel="stylesheet" href="main.css">
 		<script src="//unpkg.com/element-resize-detector/dist/element-resize-detector.min.js"></script>
+		<script>
+			window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+		  </script>
+		  <script defer src="/_vercel/insights/script.js"></script>		  
 	</head>
 	<body>
         <div id="overlay">
@@ -28,9 +32,14 @@
 				<button id="aboutButton">About</button>
 			</div>
 		</div>
+		<div id="refreshContainer">
+			<button id="refreshButton">Refresh Images</button>
+		</div>
 		<video id="backgroundvideo" playsinline webkit-playsinline muted autoplay loop src="/waveform_background.mp4" style="display: block;"></video>
 		<video id="video" playsinline webkit-playsinline muted loop src="/waveform_background.mp4" style="display: none;"></video>
-        <div id="prompt"></div>
+        <div id="promptContainer">
+			<div id="prompt"></div>
+		</div>
 		<div id="3d-graph"></div>
 		<script type="module" src="/main.js"></script>
 	</body>
